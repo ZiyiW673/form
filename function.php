@@ -59,45 +59,45 @@ function projecttcg_b2b_registration_form() {
     <h4>Customer Information</h4>
     <p class="form-row form-row-wide">
         <label for="contact_name">Contact Name&nbsp;<span class="required">*</span></label>
-        <input type="text" name="contact_name" id="contact_name" required>
+        <input type="text" name="contact_name" id="contact_name" value="<?php echo isset($_POST['contact_name']) ? esc_attr($_POST['contact_name']) : ''; ?>" required>
     </p>
     <p class="form-row form-row-wide">
         <label for="company_name">Company Name&nbsp;<span class="required">*</span></label>
-        <input type="text" name="company_name" id="company_name" required>
+        <input type="text" name="company_name" id="company_name" value="<?php echo isset($_POST['company_name']) ? esc_attr($_POST['company_name']) : ''; ?>" required>
     </p>
     <p class="form-row form-row-wide">
         <label for="reg_company_website">Company Website*</label>
-        <input type="text" name="reg_company_website" id="reg_company_website" required>
+        <input type="text" name="reg_company_website" id="reg_company_website" value="<?php echo isset($_POST['reg_company_website']) ? esc_attr($_POST['reg_company_website']) : ''; ?>" required>
     </p>
     <p class="form-row form-row-wide">
         <label for="main_email">Main Contact Email&nbsp;<span class="required">*</span></label>
-        <input type="email" name="main_email" id="main_email" required>
+        <input type="email" name="main_email" id="main_email" value="<?php echo isset($_POST['main_email']) ? esc_attr($_POST['main_email']) : ''; ?>" required>
     </p>
     <p class="form-row form-row-wide">
         <label for="business_phone">Business Phone Number&nbsp;<span class="required">*</span></label>
-        <input type="tel" name="business_phone" id="business_phone" required>
+        <input type="tel" name="business_phone" id="business_phone" value="<?php echo isset($_POST['business_phone']) ? esc_attr($_POST['business_phone']) : ''; ?>" required>
     </p>
     <p class="form-row form-row-wide">
         <label for="hear_about">How did you hear about us?&nbsp;<span class="required">*</span></label>
-        <input type="text" name="hear_about" id="hear_about" required>
+        <input type="text" name="hear_about" id="hear_about" value="<?php echo isset($_POST['hear_about']) ? esc_attr($_POST['hear_about']) : ''; ?>" required>
     </p>
 
     <h4>Customer Billing Address</h4>
-    <p><input type="text" name="billing_first_name" placeholder="First Name *" required></p>
-    <p><input type="text" name="billing_last_name" placeholder="Last Name *" required></p>
-    <p><input type="text" name="billing_address" placeholder="Address *" required></p>
-    <p><input type="text" name="billing_city" placeholder="City *" required></p>
-    <p><input type="text" name="billing_state" placeholder="State / County *" required></p>
-    <p><input type="text" name="billing_postcode" placeholder="Postcode / ZIP *" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_first_name" id="billing_first_name" placeholder="First Name *" value="<?php echo isset($_POST['billing_first_name']) ? esc_attr($_POST['billing_first_name']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_last_name" id="billing_last_name" placeholder="Last Name *" value="<?php echo isset($_POST['billing_last_name']) ? esc_attr($_POST['billing_last_name']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_address" id="billing_address" placeholder="Address *" value="<?php echo isset($_POST['billing_address']) ? esc_attr($_POST['billing_address']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_city" id="billing_city" placeholder="City *" value="<?php echo isset($_POST['billing_city']) ? esc_attr($_POST['billing_city']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_state" id="billing_state" placeholder="State / County *" value="<?php echo isset($_POST['billing_state']) ? esc_attr($_POST['billing_state']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="billing_postcode" id="billing_postcode" placeholder="Postcode / ZIP *" value="<?php echo isset($_POST['billing_postcode']) ? esc_attr($_POST['billing_postcode']) : ''; ?>" required></p>
 
     <h4>Customer Shipping Address</h4>
     <p><em>Copy from billing address if same</em></p>
-    <p><input type="text" name="shipping_first_name" placeholder="First Name *" required></p>
-    <p><input type="text" name="shipping_last_name" placeholder="Last Name *" required></p>
-    <p><input type="text" name="shipping_address" placeholder="Address *" required></p>
-    <p><input type="text" name="shipping_city" placeholder="City *" required></p>
-    <p><input type="text" name="shipping_state" placeholder="State / County *" required></p>
-    <p><input type="text" name="shipping_postcode" placeholder="Postcode / ZIP *" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_first_name" id="shipping_first_name" placeholder="First Name *" value="<?php echo isset($_POST['shipping_first_name']) ? esc_attr($_POST['shipping_first_name']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_last_name" id="shipping_last_name" placeholder="Last Name *" value="<?php echo isset($_POST['shipping_last_name']) ? esc_attr($_POST['shipping_last_name']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_address" id="shipping_address" placeholder="Address *" value="<?php echo isset($_POST['shipping_address']) ? esc_attr($_POST['shipping_address']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_city" id="shipping_city" placeholder="City *" value="<?php echo isset($_POST['shipping_city']) ? esc_attr($_POST['shipping_city']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_state" id="shipping_state" placeholder="State / County *" value="<?php echo isset($_POST['shipping_state']) ? esc_attr($_POST['shipping_state']) : ''; ?>" required></p>
+    <p class="form-row form-row-wide"><input type="text" name="shipping_postcode" id="shipping_postcode" placeholder="Postcode / ZIP *" value="<?php echo isset($_POST['shipping_postcode']) ? esc_attr($_POST['shipping_postcode']) : ''; ?>" required></p>
 
     <h4>Licenses & Documents</h4>
     <p>
@@ -155,10 +155,14 @@ function projecttcg_validate_b2b_fields($username, $email, $errors) {
         'main_email'          => 'Main Contact Email',
         'business_phone'      => 'Business Phone Number',
         'hear_about'          => 'How did you hear about us?',
+        'billing_first_name'  => 'Billing First Name',
+        'billing_last_name'   => 'Billing Last Name',
         'billing_address'     => 'Billing Address',
         'billing_city'        => 'Billing City',
         'billing_state'       => 'Billing State',
         'billing_postcode'    => 'Billing Postcode',
+        'shipping_first_name' => 'Shipping First Name',
+        'shipping_last_name'  => 'Shipping Last Name',
         'shipping_address'    => 'Shipping Address',
         'shipping_city'       => 'Shipping City',
         'shipping_state'      => 'Shipping State',
@@ -249,22 +253,221 @@ add_action('woocommerce_register_form_tag', function () {
 add_action('wp_head', function() {
     ?>
     <style>
-        input.field-error {
+        .field-error {
             border: 2px solid #e53935 !important;
             background-color: #ffebee;
+        }
+
+        .field-error-group {
+            background-color: #fff5f5;
+            border-left: 4px solid #e53935;
+            padding-left: 12px;
         }
     </style>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const errors = document.querySelectorAll('.woocommerce-error li');
-        errors.forEach(function(error) {
-            if(error.textContent.toLowerCase().includes('business license')) {
-                document.querySelector('#business_license').classList.add('field-error');
+        const form = document.querySelector('form.register');
+        if (!form) {
+            return;
+        }
+
+        const fieldSelectors = {
+            contact_name: '#contact_name',
+            company_name: '#company_name',
+            reg_company_website: '#reg_company_website',
+            main_email: '#main_email',
+            business_phone: '#business_phone',
+            hear_about: '#hear_about',
+            billing_first_name: '#billing_first_name',
+            billing_last_name: '#billing_last_name',
+            billing_address: '#billing_address',
+            billing_city: '#billing_city',
+            billing_state: '#billing_state',
+            billing_postcode: '#billing_postcode',
+            shipping_first_name: '#shipping_first_name',
+            shipping_last_name: '#shipping_last_name',
+            shipping_address: '#shipping_address',
+            shipping_city: '#shipping_city',
+            shipping_state: '#shipping_state',
+            shipping_postcode: '#shipping_postcode',
+            business_license: '#business_license',
+            cc_auth: '#cc_auth'
+        };
+
+        const validators = {
+            contact_name: value => value.trim() !== '',
+            company_name: value => value.trim() !== '',
+            reg_company_website: value => /^https?:\/\/.+/i.test(value) && isValidUrl(value),
+            main_email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+            business_phone: value => {
+                const digits = value.replace(/\D+/g, '');
+                return digits.length >= 10 && digits.length <= 15;
+            },
+            hear_about: value => value.trim() !== '',
+            billing_first_name: value => value.trim() !== '',
+            billing_last_name: value => value.trim() !== '',
+            billing_address: value => value.trim() !== '',
+            billing_city: value => value.trim() !== '',
+            billing_state: value => value.trim() !== '',
+            billing_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
+            shipping_first_name: value => value.trim() !== '',
+            shipping_last_name: value => value.trim() !== '',
+            shipping_address: value => value.trim() !== '',
+            shipping_city: value => value.trim() !== '',
+            shipping_state: value => value.trim() !== '',
+            shipping_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
+            business_license: () => {
+                const field = document.querySelector(fieldSelectors.business_license);
+                return field && field.files && field.files.length > 0;
+            },
+            cc_auth: () => {
+                const field = document.querySelector(fieldSelectors.cc_auth);
+                return field && field.files && field.files.length > 0;
             }
-            if(error.textContent.toLowerCase().includes('credit card authorization')) {
-                document.querySelector('#cc_auth').classList.add('field-error');
+        };
+
+        const errorMessages = {
+            contact_name: 'Contact Name is required.',
+            company_name: 'Company Name is required.',
+            reg_company_website: 'Please enter a valid company website URL (include http:// or https://).',
+            main_email: 'Please enter a valid email address.',
+            business_phone: 'Please enter a valid phone number with 10 to 15 digits.',
+            hear_about: 'Please let us know how you heard about us.',
+            billing_first_name: 'Billing first name is required.',
+            billing_last_name: 'Billing last name is required.',
+            billing_address: 'Billing address is required.',
+            billing_city: 'Billing city is required.',
+            billing_state: 'Billing state / county is required.',
+            billing_postcode: 'Please enter a valid billing postcode (12345 or 12345-6789).',
+            shipping_first_name: 'Shipping first name is required.',
+            shipping_last_name: 'Shipping last name is required.',
+            shipping_address: 'Shipping address is required.',
+            shipping_city: 'Shipping city is required.',
+            shipping_state: 'Shipping state / county is required.',
+            shipping_postcode: 'Please enter a valid shipping postcode (12345 or 12345-6789).',
+            business_license: 'Business license / reseller’s license upload is required.',
+            cc_auth: 'Credit Card Authorization upload is required.'
+        };
+
+        function isValidUrl(value) {
+            try {
+                new URL(value);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function clearFieldError(field) {
+            const element = document.querySelector(fieldSelectors[field]);
+            if (!element) {
+                return;
+            }
+            element.classList.remove('field-error');
+            const parent = element.closest('p');
+            if (parent) {
+                parent.classList.remove('field-error-group');
+            }
+        }
+
+        function setFieldError(field) {
+            const element = document.querySelector(fieldSelectors[field]);
+            if (!element) {
+                return;
+            }
+            element.classList.add('field-error');
+            const parent = element.closest('p');
+            if (parent) {
+                parent.classList.add('field-error-group');
+            }
+        }
+
+        function renderErrors(messages) {
+            let errorList = document.querySelector('.woocommerce-error.custom-validation');
+            if (!errorList) {
+                errorList = document.createElement('ul');
+                errorList.className = 'woocommerce-error custom-validation';
+                form.prepend(errorList);
+            }
+            errorList.innerHTML = '';
+            messages.forEach(message => {
+                const item = document.createElement('li');
+                item.textContent = message;
+                errorList.appendChild(item);
+            });
+            if (messages.length === 0) {
+                errorList.remove();
+            }
+        }
+
+        form.addEventListener('submit', function(event) {
+            const messages = [];
+
+            Object.keys(validators).forEach(field => {
+                clearFieldError(field);
+                const selector = fieldSelectors[field];
+                const input = document.querySelector(selector);
+                if (!input) {
+                    return;
+                }
+
+                const value = input.type === 'file' ? '' : input.value || '';
+                const isValid = validators[field](value);
+                if (!isValid) {
+                    messages.push(errorMessages[field]);
+                    setFieldError(field);
+                }
+            });
+
+            if (messages.length > 0) {
+                event.preventDefault();
+                renderErrors(messages);
+                const firstErrorField = document.querySelector('.field-error');
+                if (firstErrorField) {
+                    firstErrorField.focus();
+                }
+            } else {
+                const customErrors = document.querySelector('.woocommerce-error.custom-validation');
+                if (customErrors) {
+                    customErrors.remove();
+                }
             }
         });
+
+        const serverErrorKeywords = {
+            contact_name: ['contact name'],
+            company_name: ['company name'],
+            reg_company_website: ['company website'],
+            main_email: ['email address', 'main contact email'],
+            business_phone: ['phone number'],
+            hear_about: ['hear about us'],
+            billing_first_name: ['billing first name'],
+            billing_last_name: ['billing last name'],
+            billing_address: ['billing address'],
+            billing_city: ['billing city'],
+            billing_state: ['billing state'],
+            billing_postcode: ['billing postcode'],
+            shipping_first_name: ['shipping first name'],
+            shipping_last_name: ['shipping last name'],
+            shipping_address: ['shipping address'],
+            shipping_city: ['shipping city'],
+            shipping_state: ['shipping state'],
+            shipping_postcode: ['shipping postcode'],
+            business_license: ['business license'],
+            cc_auth: ['credit card authorization']
+        };
+
+        const serverErrors = document.querySelectorAll('.woocommerce-error:not(.custom-validation) li');
+        if (serverErrors.length > 0) {
+            serverErrors.forEach(error => {
+                const text = error.textContent.toLowerCase();
+                Object.keys(serverErrorKeywords).forEach(field => {
+                    if (serverErrorKeywords[field].some(keyword => text.includes(keyword))) {
+                        setFieldError(field);
+                    }
+                });
+            });
+        }
     });
     </script>
     <?php
