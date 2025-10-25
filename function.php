@@ -149,20 +149,62 @@ add_action('woocommerce_register_post', 'projecttcg_validate_b2b_fields', 10, 3)
 function projecttcg_validate_b2b_fields($username, $email, $errors) {
     // Required fields check
     $required_fields = [
-        'contact_name'   => 'Contact Name',
-        'company_name'   => 'Company Name',
-        'main_email'     => 'Main Contact Email',
-        'business_phone' => 'Business Phone Number',
-        'hear_about'     => 'How did you hear about us?',
-        'billing_address'=> 'Billing Address',
-        'billing_city'   => 'Billing City',
-        'billing_state'  => 'Billing State',
-        'billing_postcode' => 'Billing Postcode',
+        'contact_name'        => 'Contact Name',
+        'company_name'        => 'Company Name',
+        'reg_company_website' => 'Company Website',
+        'main_email'          => 'Main Contact Email',
+        'business_phone'      => 'Business Phone Number',
+        'hear_about'          => 'How did you hear about us?',
+        'billing_address'     => 'Billing Address',
+        'billing_city'        => 'Billing City',
+        'billing_state'       => 'Billing State',
+        'billing_postcode'    => 'Billing Postcode',
+        'shipping_address'    => 'Shipping Address',
+        'shipping_city'       => 'Shipping City',
+        'shipping_state'      => 'Shipping State',
+        'shipping_postcode'   => 'Shipping Postcode',
     ];
 
     foreach ($required_fields as $field => $label) {
         if (empty($_POST[$field])) {
             $errors->add($field . '_error', sprintf(__('%s is required.', 'woocommerce'), $label));
+        }
+    }
+
+    // Validate company website URL
+    if (!empty($_POST['reg_company_website'])) {
+        $website = trim($_POST['reg_company_website']);
+        if (!filter_var($website, FILTER_VALIDATE_URL)) {
+            $errors->add('reg_company_website_error', __('Please enter a valid company website URL (including http:// or https://).', 'woocommerce'));
+        }
+    }
+
+    // Validate main contact email address
+    if (!empty($_POST['main_email'])) {
+        $email = trim($_POST['main_email']);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors->add('main_email_error', __('Please enter a valid email address.', 'woocommerce'));
+        }
+    }
+
+    // Validate business phone length (allow 10-15 digits)
+    if (!empty($_POST['business_phone'])) {
+        $phone_digits = preg_replace('/\D+/', '', $_POST['business_phone']);
+        $length = strlen($phone_digits);
+        if ($length < 10 || $length > 15) {
+            $errors->add('business_phone_error', __('Please enter a valid phone number with 10 to 15 digits.', 'woocommerce'));
+        }
+    }
+
+    // Validate billing and shipping postcode format (US ZIP: 12345 or 12345-6789)
+    $postcode_fields = [
+        'billing_postcode'  => 'Billing Postcode',
+        'shipping_postcode' => 'Shipping Postcode',
+    ];
+
+    foreach ($postcode_fields as $field => $label) {
+        if (!empty($_POST[$field]) && !preg_match('/^\d{5}(-\d{4})?$/', $_POST[$field])) {
+            $errors->add($field . '_error', sprintf(__('Please enter a valid %s (12345 or 12345-6789).', 'woocommerce'), $label));
         }
     }
 
