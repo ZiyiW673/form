@@ -263,6 +263,13 @@ add_action('wp_head', function() {
             border-left: 4px solid #e53935;
             padding-left: 12px;
         }
+
+        .field-error-message {
+            color: #c62828;
+            font-size: 0.9em;
+            margin-top: 6px;
+            display: block;
+        }
     </style>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -367,10 +374,14 @@ add_action('wp_head', function() {
             const parent = element.closest('p');
             if (parent) {
                 parent.classList.remove('field-error-group');
+                const message = parent.querySelector('.field-error-message');
+                if (message) {
+                    message.remove();
+                }
             }
         }
 
-        function setFieldError(field) {
+        function setFieldError(field, messageText) {
             const element = document.querySelector(fieldSelectors[field]);
             if (!element) {
                 return;
@@ -379,29 +390,19 @@ add_action('wp_head', function() {
             const parent = element.closest('p');
             if (parent) {
                 parent.classList.add('field-error-group');
-            }
-        }
-
-        function renderErrors(messages) {
-            let errorList = document.querySelector('.woocommerce-error.custom-validation');
-            if (!errorList) {
-                errorList = document.createElement('ul');
-                errorList.className = 'woocommerce-error custom-validation';
-                form.prepend(errorList);
-            }
-            errorList.innerHTML = '';
-            messages.forEach(message => {
-                const item = document.createElement('li');
-                item.textContent = message;
-                errorList.appendChild(item);
-            });
-            if (messages.length === 0) {
-                errorList.remove();
+                let message = parent.querySelector('.field-error-message');
+                if (!message) {
+                    message = document.createElement('span');
+                    message.className = 'field-error-message';
+                    parent.appendChild(message);
+                }
+                message.textContent = messageText;
             }
         }
 
         form.addEventListener('submit', function(event) {
-            const messages = [];
+            let firstErrorField = null;
+            let hasErrors = false;
 
             Object.keys(validators).forEach(field => {
                 clearFieldError(field);
@@ -414,24 +415,34 @@ add_action('wp_head', function() {
                 const value = input.type === 'file' ? '' : input.value || '';
                 const isValid = validators[field](value);
                 if (!isValid) {
-                    messages.push(errorMessages[field]);
-                    setFieldError(field);
+                    hasErrors = true;
+                    setFieldError(field, errorMessages[field]);
+                    if (!firstErrorField) {
+                        firstErrorField = input;
+                    }
                 }
             });
 
-            if (messages.length > 0) {
+            if (hasErrors) {
                 event.preventDefault();
-                renderErrors(messages);
-                const firstErrorField = document.querySelector('.field-error');
                 if (firstErrorField) {
                     firstErrorField.focus();
                 }
-            } else {
-                const customErrors = document.querySelector('.woocommerce-error.custom-validation');
-                if (customErrors) {
-                    customErrors.remove();
-                }
             }
+        });
+
+        Object.keys(fieldSelectors).forEach(field => {
+            const element = document.querySelector(fieldSelectors[field]);
+            if (!element) {
+                return;
+            }
+            const eventType = element.type === 'file' ? 'change' : 'input';
+            element.addEventListener(eventType, () => {
+                const value = element.type === 'file' ? '' : element.value || '';
+                if (validators[field](value)) {
+                    clearFieldError(field);
+                }
+            });
         });
 
         const serverErrorKeywords = {
@@ -459,14 +470,25 @@ add_action('wp_head', function() {
 
         const serverErrors = document.querySelectorAll('.woocommerce-error:not(.custom-validation) li');
         if (serverErrors.length > 0) {
+            const listsToRemove = new Set();
             serverErrors.forEach(error => {
-                const text = error.textContent.toLowerCase();
+                const text = error.textContent;
+                const lowerText = text.toLowerCase();
+                let matched = false;
                 Object.keys(serverErrorKeywords).forEach(field => {
-                    if (serverErrorKeywords[field].some(keyword => text.includes(keyword))) {
-                        setFieldError(field);
+                    if (serverErrorKeywords[field].some(keyword => lowerText.includes(keyword))) {
+                        setFieldError(field, text.trim());
+                        matched = true;
                     }
                 });
+                if (matched) {
+                    const list = error.closest('ul.woocommerce-error');
+                    if (list) {
+                        listsToRemove.add(list);
+                    }
+                }
             });
+            listsToRemove.forEach(list => list.remove());
         }
     });
     </script>
