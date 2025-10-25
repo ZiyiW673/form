@@ -468,26 +468,38 @@ add_action('wp_head', function() {
             cc_auth: ['credit card authorization']
         };
 
-        const serverErrors = document.querySelectorAll('.woocommerce-error:not(.custom-validation) li');
-        if (serverErrors.length > 0) {
+        const allErrorLists = Array.from(document.querySelectorAll('ul.woocommerce-error'));
+        const registerErrorLists = allErrorLists.filter(list => {
+            if (!form) {
+                return false;
+            }
+            let sibling = list.nextElementSibling;
+            while (sibling && sibling.nodeType !== 1) {
+                sibling = sibling.nextElementSibling;
+            }
+            return sibling === form;
+        });
+
+        if (registerErrorLists.length > 0) {
             const listsToRemove = new Set();
-            serverErrors.forEach(error => {
-                const text = error.textContent;
-                const lowerText = text.toLowerCase();
-                let matched = false;
-                Object.keys(serverErrorKeywords).forEach(field => {
-                    if (serverErrorKeywords[field].some(keyword => lowerText.includes(keyword))) {
-                        setFieldError(field, text.trim());
-                        matched = true;
-                    }
-                });
-                if (matched) {
-                    const list = error.closest('ul.woocommerce-error');
-                    if (list) {
+
+            registerErrorLists.forEach(list => {
+                list.querySelectorAll('li').forEach(error => {
+                    const text = error.textContent;
+                    const lowerText = text.toLowerCase();
+                    let matched = false;
+                    Object.keys(serverErrorKeywords).forEach(field => {
+                        if (serverErrorKeywords[field].some(keyword => lowerText.includes(keyword))) {
+                            setFieldError(field, text.trim());
+                            matched = true;
+                        }
+                    });
+                    if (matched) {
                         listsToRemove.add(list);
                     }
-                }
+                });
             });
+
             listsToRemove.forEach(list => list.remove());
         }
     });
