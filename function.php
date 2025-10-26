@@ -274,233 +274,583 @@ add_action('wp_head', function() {
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form.register');
-        if (!form) {
-            return;
-        }
 
-        const fieldSelectors = {
-            contact_name: '#contact_name',
-            company_name: '#company_name',
-            reg_company_website: '#reg_company_website',
-            main_email: '#main_email',
-            business_phone: '#business_phone',
-            hear_about: '#hear_about',
-            billing_first_name: '#billing_first_name',
-            billing_last_name: '#billing_last_name',
-            billing_address: '#billing_address',
-            billing_city: '#billing_city',
-            billing_state: '#billing_state',
-            billing_postcode: '#billing_postcode',
-            shipping_first_name: '#shipping_first_name',
-            shipping_last_name: '#shipping_last_name',
-            shipping_address: '#shipping_address',
-            shipping_city: '#shipping_city',
-            shipping_state: '#shipping_state',
-            shipping_postcode: '#shipping_postcode',
-            business_license: '#business_license',
-            cc_auth: '#cc_auth'
-        };
+        if (form) {
+            const fieldSelectors = {
+                contact_name: '#contact_name',
+                company_name: '#company_name',
+                reg_company_website: '#reg_company_website',
+                main_email: '#main_email',
+                business_phone: '#business_phone',
+                hear_about: '#hear_about',
+                billing_first_name: '#billing_first_name',
+                billing_last_name: '#billing_last_name',
+                billing_address: '#billing_address',
+                billing_city: '#billing_city',
+                billing_state: '#billing_state',
+                billing_postcode: '#billing_postcode',
+                shipping_first_name: '#shipping_first_name',
+                shipping_last_name: '#shipping_last_name',
+                shipping_address: '#shipping_address',
+                shipping_city: '#shipping_city',
+                shipping_state: '#shipping_state',
+                shipping_postcode: '#shipping_postcode',
+                business_license: '#business_license',
+                cc_auth: '#cc_auth'
+            };
 
-        const validators = {
-            contact_name: value => value.trim() !== '',
-            company_name: value => value.trim() !== '',
-            reg_company_website: value => /^https?:\/\/.+/i.test(value) && isValidUrl(value),
-            main_email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-            business_phone: value => {
-                const digits = value.replace(/\D+/g, '');
-                return digits.length >= 10 && digits.length <= 15;
-            },
-            hear_about: value => value.trim() !== '',
-            billing_first_name: value => value.trim() !== '',
-            billing_last_name: value => value.trim() !== '',
-            billing_address: value => value.trim() !== '',
-            billing_city: value => value.trim() !== '',
-            billing_state: value => value.trim() !== '',
-            billing_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
-            shipping_first_name: value => value.trim() !== '',
-            shipping_last_name: value => value.trim() !== '',
-            shipping_address: value => value.trim() !== '',
-            shipping_city: value => value.trim() !== '',
-            shipping_state: value => value.trim() !== '',
-            shipping_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
-            business_license: () => {
-                const field = document.querySelector(fieldSelectors.business_license);
-                return field && field.files && field.files.length > 0;
-            },
-            cc_auth: () => {
-                const field = document.querySelector(fieldSelectors.cc_auth);
-                return field && field.files && field.files.length > 0;
-            }
-        };
+            const validators = {
+                contact_name: value => value.trim() !== '',
+                company_name: value => value.trim() !== '',
+                reg_company_website: value => /^https?:\/\/.+/i.test(value) && isValidUrl(value),
+                main_email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                business_phone: value => {
+                    const digits = value.replace(/\D+/g, '');
+                    return digits.length >= 10 && digits.length <= 15;
+                },
+                hear_about: value => value.trim() !== '',
+                billing_first_name: value => value.trim() !== '',
+                billing_last_name: value => value.trim() !== '',
+                billing_address: value => value.trim() !== '',
+                billing_city: value => value.trim() !== '',
+                billing_state: value => value.trim() !== '',
+                billing_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
+                shipping_first_name: value => value.trim() !== '',
+                shipping_last_name: value => value.trim() !== '',
+                shipping_address: value => value.trim() !== '',
+                shipping_city: value => value.trim() !== '',
+                shipping_state: value => value.trim() !== '',
+                shipping_postcode: value => /^\d{5}(-\d{4})?$/.test(value.trim()),
+                business_license: () => {
+                    const field = document.querySelector(fieldSelectors.business_license);
+                    return field && field.files && field.files.length > 0;
+                },
+                cc_auth: () => {
+                    const field = document.querySelector(fieldSelectors.cc_auth);
+                    return field && field.files && field.files.length > 0;
+                }
+            };
 
-        const errorMessages = {
-            contact_name: 'Contact Name is required.',
-            company_name: 'Company Name is required.',
-            reg_company_website: 'Please enter a valid company website URL (include http:// or https://).',
-            main_email: 'Please enter a valid email address.',
-            business_phone: 'Please enter a valid phone number with 10 to 15 digits.',
-            hear_about: 'Please let us know how you heard about us.',
-            billing_first_name: 'Billing first name is required.',
-            billing_last_name: 'Billing last name is required.',
-            billing_address: 'Billing address is required.',
-            billing_city: 'Billing city is required.',
-            billing_state: 'Billing state / county is required.',
-            billing_postcode: 'Please enter a valid billing postcode (12345 or 12345-6789).',
-            shipping_first_name: 'Shipping first name is required.',
-            shipping_last_name: 'Shipping last name is required.',
-            shipping_address: 'Shipping address is required.',
-            shipping_city: 'Shipping city is required.',
-            shipping_state: 'Shipping state / county is required.',
-            shipping_postcode: 'Please enter a valid shipping postcode (12345 or 12345-6789).',
-            business_license: 'Business license / reseller’s license upload is required.',
-            cc_auth: 'Credit Card Authorization upload is required.'
-        };
+            const errorMessages = {
+                contact_name: 'Contact Name is required.',
+                company_name: 'Company Name is required.',
+                reg_company_website: 'Please enter a valid company website URL (include http:// or https://).',
+                main_email: 'Please enter a valid email address.',
+                business_phone: 'Please enter a valid phone number with 10 to 15 digits.',
+                hear_about: 'Please let us know how you heard about us.',
+                billing_first_name: 'Billing first name is required.',
+                billing_last_name: 'Billing last name is required.',
+                billing_address: 'Billing address is required.',
+                billing_city: 'Billing city is required.',
+                billing_state: 'Billing state / county is required.',
+                billing_postcode: 'Please enter a valid billing postcode (12345 or 12345-6789).',
+                shipping_first_name: 'Shipping first name is required.',
+                shipping_last_name: 'Shipping last name is required.',
+                shipping_address: 'Shipping address is required.',
+                shipping_city: 'Shipping city is required.',
+                shipping_state: 'Shipping state / county is required.',
+                shipping_postcode: 'Please enter a valid shipping postcode (12345 or 12345-6789).',
+                business_license: 'Business license / reseller’s license upload is required.',
+                cc_auth: 'Credit Card Authorization upload is required.'
+            };
 
-        function isValidUrl(value) {
-            try {
-                new URL(value);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
-
-        function clearFieldError(field) {
-            const element = document.querySelector(fieldSelectors[field]);
-            if (!element) {
-                return;
-            }
-            element.classList.remove('field-error');
-            const parent = element.closest('p');
-            if (parent) {
-                parent.classList.remove('field-error-group');
-                const message = parent.querySelector('.field-error-message');
-                if (message) {
-                    message.remove();
+            function isValidUrl(value) {
+                try {
+                    new URL(value);
+                    return true;
+                } catch (e) {
+                    return false;
                 }
             }
-        }
 
-        function setFieldError(field, messageText) {
-            const element = document.querySelector(fieldSelectors[field]);
-            if (!element) {
-                return;
-            }
-            element.classList.add('field-error');
-            const parent = element.closest('p');
-            if (parent) {
-                parent.classList.add('field-error-group');
-                let message = parent.querySelector('.field-error-message');
-                if (!message) {
-                    message = document.createElement('span');
-                    message.className = 'field-error-message';
-                    parent.appendChild(message);
-                }
-                message.textContent = messageText;
-            }
-        }
-
-        form.addEventListener('submit', function(event) {
-            let firstErrorField = null;
-            let hasErrors = false;
-
-            Object.keys(validators).forEach(field => {
-                clearFieldError(field);
-                const selector = fieldSelectors[field];
-                const input = document.querySelector(selector);
-                if (!input) {
+            function clearFieldError(field) {
+                const element = document.querySelector(fieldSelectors[field]);
+                if (!element) {
                     return;
                 }
+                element.classList.remove('field-error');
+                const parent = element.closest('p');
+                if (parent) {
+                    parent.classList.remove('field-error-group');
+                    const message = parent.querySelector('.field-error-message');
+                    if (message) {
+                        message.remove();
+                    }
+                }
+            }
 
-                const value = input.type === 'file' ? '' : input.value || '';
-                const isValid = validators[field](value);
-                if (!isValid) {
-                    hasErrors = true;
-                    setFieldError(field, errorMessages[field]);
-                    if (!firstErrorField) {
-                        firstErrorField = input;
+            function setFieldError(field, messageText) {
+                const element = document.querySelector(fieldSelectors[field]);
+                if (!element) {
+                    return;
+                }
+                element.classList.add('field-error');
+                const parent = element.closest('p');
+                if (parent) {
+                    parent.classList.add('field-error-group');
+                    let message = parent.querySelector('.field-error-message');
+                    if (!message) {
+                        message = document.createElement('span');
+                        message.className = 'field-error-message';
+                        parent.appendChild(message);
+                    }
+                    message.textContent = messageText;
+                }
+            }
+
+            form.addEventListener('submit', function(event) {
+                let firstErrorField = null;
+                let hasErrors = false;
+
+                Object.keys(validators).forEach(field => {
+                    clearFieldError(field);
+                    const selector = fieldSelectors[field];
+                    const input = document.querySelector(selector);
+                    if (!input) {
+                        return;
+                    }
+
+                    const value = input.type === 'file' ? '' : input.value || '';
+                    const isValid = validators[field](value);
+                    if (!isValid) {
+                        hasErrors = true;
+                        setFieldError(field, errorMessages[field]);
+                        if (!firstErrorField) {
+                            firstErrorField = input;
+                        }
+                    }
+                });
+
+                if (hasErrors) {
+                    event.preventDefault();
+                    if (firstErrorField) {
+                        firstErrorField.focus();
                     }
                 }
             });
 
-            if (hasErrors) {
-                event.preventDefault();
-                if (firstErrorField) {
-                    firstErrorField.focus();
+            Object.keys(fieldSelectors).forEach(field => {
+                const element = document.querySelector(fieldSelectors[field]);
+                if (!element) {
+                    return;
                 }
-            }
-        });
-
-        Object.keys(fieldSelectors).forEach(field => {
-            const element = document.querySelector(fieldSelectors[field]);
-            if (!element) {
-                return;
-            }
-            const eventType = element.type === 'file' ? 'change' : 'input';
-            element.addEventListener(eventType, () => {
-                const value = element.type === 'file' ? '' : element.value || '';
-                if (validators[field](value)) {
-                    clearFieldError(field);
-                }
-            });
-        });
-
-        const serverErrorKeywords = {
-            contact_name: ['contact name'],
-            company_name: ['company name'],
-            reg_company_website: ['company website'],
-            main_email: ['email address', 'main contact email'],
-            business_phone: ['phone number'],
-            hear_about: ['hear about us'],
-            billing_first_name: ['billing first name'],
-            billing_last_name: ['billing last name'],
-            billing_address: ['billing address'],
-            billing_city: ['billing city'],
-            billing_state: ['billing state'],
-            billing_postcode: ['billing postcode'],
-            shipping_first_name: ['shipping first name'],
-            shipping_last_name: ['shipping last name'],
-            shipping_address: ['shipping address'],
-            shipping_city: ['shipping city'],
-            shipping_state: ['shipping state'],
-            shipping_postcode: ['shipping postcode'],
-            business_license: ['business license'],
-            cc_auth: ['credit card authorization']
-        };
-
-        const allErrorLists = Array.from(document.querySelectorAll('ul.woocommerce-error'));
-        const registerErrorLists = allErrorLists.filter(list => {
-            if (!form) {
-                return false;
-            }
-            let sibling = list.nextElementSibling;
-            while (sibling && sibling.nodeType !== 1) {
-                sibling = sibling.nextElementSibling;
-            }
-            return sibling === form;
-        });
-
-        if (registerErrorLists.length > 0) {
-            const listsToRemove = new Set();
-
-            registerErrorLists.forEach(list => {
-                list.querySelectorAll('li').forEach(error => {
-                    const text = error.textContent;
-                    const lowerText = text.toLowerCase();
-                    let matched = false;
-                    Object.keys(serverErrorKeywords).forEach(field => {
-                        if (serverErrorKeywords[field].some(keyword => lowerText.includes(keyword))) {
-                            setFieldError(field, text.trim());
-                            matched = true;
-                        }
-                    });
-                    if (matched) {
-                        listsToRemove.add(list);
+                const eventType = element.type === 'file' ? 'change' : 'input';
+                element.addEventListener(eventType, () => {
+                    const value = element.type === 'file' ? '' : element.value || '';
+                    if (validators[field](value)) {
+                        clearFieldError(field);
                     }
                 });
             });
 
-            listsToRemove.forEach(list => list.remove());
+            const serverErrorKeywords = {
+                contact_name: ['contact name'],
+                company_name: ['company name'],
+                reg_company_website: ['company website'],
+                main_email: ['email address', 'main contact email'],
+                business_phone: ['phone number'],
+                hear_about: ['hear about us'],
+                billing_first_name: ['billing first name'],
+                billing_last_name: ['billing last name'],
+                billing_address: ['billing address'],
+                billing_city: ['billing city'],
+                billing_state: ['billing state'],
+                billing_postcode: ['billing postcode'],
+                shipping_first_name: ['shipping first name'],
+                shipping_last_name: ['shipping last name'],
+                shipping_address: ['shipping address'],
+                shipping_city: ['shipping city'],
+                shipping_state: ['shipping state'],
+                shipping_postcode: ['shipping postcode'],
+                business_license: ['business license'],
+                cc_auth: ['credit card authorization']
+            };
+
+            const allErrorLists = Array.from(document.querySelectorAll('ul.woocommerce-error'));
+            const registerErrorLists = allErrorLists.filter(list => {
+                let sibling = list.nextElementSibling;
+                while (sibling && sibling.nodeType !== 1) {
+                    sibling = sibling.nextElementSibling;
+                }
+                return sibling === form;
+            });
+
+            if (registerErrorLists.length > 0) {
+                const listsToRemove = new Set();
+
+                registerErrorLists.forEach(list => {
+                    list.querySelectorAll('li').forEach(error => {
+                        const text = error.textContent;
+                        const lowerText = text.toLowerCase();
+                        let matched = false;
+                        Object.keys(serverErrorKeywords).forEach(field => {
+                            if (serverErrorKeywords[field].some(keyword => lowerText.includes(keyword))) {
+                                setFieldError(field, text.trim());
+                                matched = true;
+                            }
+                        });
+                        if (matched) {
+                            listsToRemove.add(list);
+                        }
+                    });
+                });
+
+                listsToRemove.forEach(list => list.remove());
+            }
+        }
+
+        function normalizeLabel(value) {
+            return (value || '')
+                .toString()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/gi, '')
+                .toLowerCase();
+        }
+
+        function normalizeGameKey(value) {
+            return normalizeLabel(value);
+        }
+
+        const overlayFieldRules = {
+            pokemon: ['name', 'source set', 'id', 'supertype', 'types'],
+            'one piece': ['name', 'source set', 'code', 'rarity', 'type', 'color'],
+            riftbound: ['name', 'source set', 'number', 'rarity', 'cardtype', 'domin']
+        };
+
+        const canonicalGameMap = {};
+        Object.keys(overlayFieldRules).forEach(game => {
+            canonicalGameMap[normalizeGameKey(game)] = game;
+        });
+
+        const overlayGameAliases = {
+            pokemon: 'pokemon',
+            pokemontcg: 'pokemon',
+            onepiece: 'one piece',
+            onepiecetcg: 'one piece',
+            onepiececardgame: 'one piece',
+            riftbound: 'riftbound'
+        };
+
+        const normalizedOverlayRules = {};
+        Object.keys(overlayFieldRules).forEach(game => {
+            normalizedOverlayRules[game] = Array.from(new Set(overlayFieldRules[game].map(field => normalizeLabel(field))));
+        });
+
+        function mapToGame(value) {
+            if (!value) {
+                return null;
+            }
+            const normalized = normalizeGameKey(value);
+            if (!normalized) {
+                return null;
+            }
+            if (overlayGameAliases[normalized]) {
+                return overlayGameAliases[normalized];
+            }
+            if (canonicalGameMap[normalized]) {
+                return canonicalGameMap[normalized];
+            }
+            return null;
+        }
+
+        function detectGame(overlay) {
+            if (!(overlay instanceof HTMLElement)) {
+                return null;
+            }
+
+            if (overlay.dataset) {
+                for (const key in overlay.dataset) {
+                    const mapped = mapToGame(overlay.dataset[key]);
+                    if (mapped) {
+                        return mapped;
+                    }
+                }
+            }
+
+            const attributesToInspect = ['aria-label', 'title', 'data-type', 'data-category'];
+            for (const attribute of attributesToInspect) {
+                const value = overlay.getAttribute(attribute);
+                const mapped = mapToGame(value);
+                if (mapped) {
+                    return mapped;
+                }
+            }
+
+            if (overlay.classList) {
+                for (const className of overlay.classList) {
+                    const mapped = mapToGame(className);
+                    if (mapped) {
+                        return mapped;
+                    }
+                }
+            }
+
+            const relatedSelectors = [
+                '[data-game]',
+                '[data-card-game]',
+                '[data-product-game]',
+                '[data-category]',
+                '[data-type]',
+                '.card-game',
+                '.game-name',
+                '.product-game',
+                '.product-series',
+                '.overlay-game',
+                '.tcg-game',
+                '.meta-game',
+                '.card-category',
+                '.card-series'
+            ];
+
+            for (const selector of relatedSelectors) {
+                const element = overlay.querySelector(selector);
+                if (!element) {
+                    continue;
+                }
+                const datasetValues = [
+                    element.getAttribute('data-game'),
+                    element.getAttribute('data-card-game'),
+                    element.getAttribute('data-category'),
+                    element.getAttribute('data-type')
+                ];
+                for (const value of datasetValues) {
+                    const mapped = mapToGame(value);
+                    if (mapped) {
+                        return mapped;
+                    }
+                }
+                const textMapped = mapToGame((element.textContent || '').trim());
+                if (textMapped) {
+                    return textMapped;
+                }
+            }
+
+            const heading = overlay.querySelector('h1, h2, h3, h4, header');
+            if (heading) {
+                const mapped = mapToGame((heading.textContent || '').trim());
+                if (mapped) {
+                    return mapped;
+                }
+            }
+
+            const content = (overlay.textContent || '').toLowerCase();
+            if (content.includes('pokemon')) {
+                return 'pokemon';
+            }
+            if (content.includes('one piece')) {
+                return 'one piece';
+            }
+            if (content.includes('riftbound')) {
+                return 'riftbound';
+            }
+
+            return null;
+        }
+
+        function looksLikeInfoElement(element, overlay) {
+            if (!(element instanceof HTMLElement)) {
+                return false;
+            }
+            if (element.hasAttribute('data-field') || element.hasAttribute('data-attribute')) {
+                return true;
+            }
+            if (element.matches('dt, dd, tr, li')) {
+                return true;
+            }
+            if (element.classList && element.classList.length) {
+                const keywords = ['info', 'detail', 'meta', 'attribute', 'stat', 'card', 'data'];
+                for (const cls of element.classList) {
+                    const lower = cls.toLowerCase();
+                    if (keywords.some(keyword => lower.includes(keyword))) {
+                        return true;
+                    }
+                }
+            }
+            let parent = element.parentElement;
+            while (parent && parent !== overlay) {
+                if (parent.classList && parent.classList.length) {
+                    const lowerClasses = Array.from(parent.classList).map(cls => cls.toLowerCase());
+                    if (lowerClasses.some(cls => ['info', 'detail', 'meta', 'attribute', 'stat', 'card', 'data'].some(keyword => cls.includes(keyword)))) {
+                        return true;
+                    }
+                }
+                parent = parent.parentElement;
+            }
+            if (element.closest('table')) {
+                const table = element.closest('table');
+                if (table && table.classList && Array.from(table.classList).some(cls => cls.toLowerCase().includes('info') || cls.toLowerCase().includes('detail') || cls.toLowerCase().includes('attribute'))) {
+                    return true;
+                }
+            }
+            if (element.closest('ul, ol')) {
+                const list = element.closest('ul, ol');
+                if (list && list.classList && Array.from(list.classList).some(cls => cls.toLowerCase().includes('info') || cls.toLowerCase().includes('detail') || cls.toLowerCase().includes('attribute'))) {
+                    return true;
+                }
+            }
+            const text = (element.textContent || '').trim();
+            return text.includes(':');
+        }
+
+        function extractLabel(row) {
+            if (!row || !(row instanceof HTMLElement)) {
+                return '';
+            }
+            if (row.dataset) {
+                const datasetLabel = row.dataset.field || row.dataset.attribute || row.dataset.label || row.dataset.name;
+                if (datasetLabel) {
+                    return datasetLabel;
+                }
+            }
+            if (row.matches('dt, th')) {
+                return (row.textContent || '').trim();
+            }
+            const labelElement = row.querySelector('[data-label], .label, .field-label, .info-label, strong, b, th');
+            if (labelElement) {
+                return (labelElement.textContent || '').trim();
+            }
+            if (row.tagName === 'TR') {
+                const firstCell = row.querySelector('th, td');
+                if (firstCell) {
+                    return (firstCell.textContent || '').trim();
+                }
+            }
+            const text = row.textContent || '';
+            const colonIndex = text.indexOf(':');
+            if (colonIndex !== -1 && colonIndex <= 40) {
+                return text.slice(0, colonIndex).trim();
+            }
+            return '';
+        }
+
+        function getInfoRows(overlay) {
+            const rows = [];
+            const seen = new WeakSet();
+            const selectors = ['[data-field]', '[data-attribute]', '.overlay-info-row', '.info-row', '.card-info-row', '.detail-row', 'li', 'tr', 'dt'];
+
+            selectors.forEach(selector => {
+                overlay.querySelectorAll(selector).forEach(element => {
+                    if (!(element instanceof HTMLElement) || seen.has(element)) {
+                        return;
+                    }
+                    if (!looksLikeInfoElement(element, overlay)) {
+                        return;
+                    }
+                    const label = extractLabel(element);
+                    if (!label) {
+                        return;
+                    }
+                    const row = { element, label };
+                    if (element.tagName === 'DT') {
+                        const dd = element.nextElementSibling;
+                        if (dd && dd.tagName === 'DD') {
+                            row.associated = dd;
+                            seen.add(dd);
+                        }
+                    }
+                    seen.add(element);
+                    rows.push(row);
+                });
+            });
+
+            return rows;
+        }
+
+        function hideElement(element) {
+            if (!element || !(element instanceof HTMLElement)) {
+                return;
+            }
+            if (element.dataset.overlayHiddenByFilter === '1') {
+                return;
+            }
+            element.dataset.overlayHiddenByFilter = '1';
+            element.style.display = 'none';
+        }
+
+        function showElement(element) {
+            if (!element || !(element instanceof HTMLElement)) {
+                return;
+            }
+            if (element.dataset.overlayHiddenByFilter === '1') {
+                element.style.removeProperty('display');
+                delete element.dataset.overlayHiddenByFilter;
+            }
+        }
+
+        function processOverlay(overlay) {
+            if (!(overlay instanceof HTMLElement)) {
+                return;
+            }
+            const game = detectGame(overlay);
+            if (!game) {
+                return;
+            }
+            const allowedLabels = normalizedOverlayRules[game];
+            if (!allowedLabels) {
+                return;
+            }
+            const rows = getInfoRows(overlay);
+            rows.forEach(({ element, associated, label }) => {
+                const normalizedLabel = normalizeLabel(label);
+                if (allowedLabels.includes(normalizedLabel)) {
+                    showElement(element);
+                    if (associated) {
+                        showElement(associated);
+                    }
+                } else {
+                    hideElement(element);
+                    if (associated) {
+                        hideElement(associated);
+                    }
+                }
+            });
+        }
+
+        function looksLikeOverlayElement(node) {
+            if (!(node instanceof HTMLElement)) {
+                return false;
+            }
+            if (node.hasAttribute('data-overlay') || node.hasAttribute('data-card-overlay')) {
+                return true;
+            }
+            const role = node.getAttribute('role');
+            if (role && /(dialog|alertdialog)/i.test(role)) {
+                return true;
+            }
+            const className = node.className || '';
+            if (typeof className === 'string' && /(overlay|modal|popup|lightbox)/i.test(className)) {
+                return true;
+            }
+            return false;
+        }
+
+        function scanForOverlays(root) {
+            if (!(root instanceof HTMLElement)) {
+                return;
+            }
+            if (looksLikeOverlayElement(root)) {
+                processOverlay(root);
+            }
+            root.querySelectorAll('[data-overlay],[data-card-overlay],[class*="overlay"],[class*="Overlay"],[class*="modal"],[class*="Modal"],[class*="popup"],[class*="Popup"],.lightbox').forEach(element => {
+                processOverlay(element);
+            });
+        }
+
+        if (document.body) {
+            scanForOverlays(document.body);
+            if (typeof MutationObserver !== 'undefined') {
+                const overlayObserver = new MutationObserver(mutations => {
+                    mutations.forEach(mutation => {
+                        mutation.addedNodes.forEach(node => {
+                            if (node instanceof HTMLElement) {
+                                scanForOverlays(node);
+                            }
+                        });
+                    });
+                });
+                overlayObserver.observe(document.body, { childList: true, subtree: true });
+            }
         }
     });
     </script>
